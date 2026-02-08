@@ -8,28 +8,29 @@ import {
   UserIcon,
   Bars3Icon,
   XMarkIcon,
+  ChevronDownIcon,
 } from '@heroicons/react/24/outline';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
 // PUBLIC_INTERFACE
 /**
- * Main header component with sticky navigation and search
+ * Main header component with sticky navigation and electronics categories
  */
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [shopDropdownOpen, setShopDropdownOpen] = useState(false);
   const { getCartItemCount } = useCart();
   const { wishlist } = useWishlist();
   const navigate = useNavigate();
 
   const categories = [
-    { name: 'New Arrivals', path: '/shop?filter=new' },
-    { name: 'Clothing', path: '/shop?category=clothing' },
-    { name: 'Accessories', path: '/shop?category=accessories' },
-    { name: 'Jewelry', path: '/shop?category=jewelry' },
-    { name: 'Footwear', path: '/shop?category=footwear' },
+    { name: 'Laptops', path: '/shop?category=laptops' },
+    { name: 'Computer Accessories', path: '/shop?category=computer-accessories' },
+    { name: 'CCTV Camera', path: '/shop?category=cctv-camera' },
+    { name: 'Biometric Items', path: '/shop?category=biometric-items' },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
@@ -45,7 +46,7 @@ const Header: React.FC = () => {
     <header className="sticky top-0 z-50 bg-white shadow-md">
       {/* Top Bar */}
       <div className="bg-primary text-white py-2 text-center text-sm">
-        <p>Free shipping on orders over $500 | 30-day returns</p>
+        <p>Free shipping on orders over $500 | 30-day returns | Premium electronics delivered</p>
       </div>
 
       {/* Main Header */}
@@ -57,21 +58,74 @@ const Header: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               className="text-2xl font-bold text-primary"
             >
-              LUXORA
+              TECHORA
             </motion.h1>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                to={category.path}
-                className="text-text hover:text-primary transition-colors duration-200 font-medium"
-              >
-                {category.name}
-              </Link>
-            ))}
+            <Link
+              to="/"
+              className="text-text hover:text-primary transition-colors duration-200 font-medium"
+            >
+              Home
+            </Link>
+            
+            {/* Shop Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setShopDropdownOpen(true)}
+              onMouseLeave={() => setShopDropdownOpen(false)}
+            >
+              <button className="text-text hover:text-primary transition-colors duration-200 font-medium flex items-center gap-1">
+                Shop
+                <ChevronDownIcon className="h-4 w-4" />
+              </button>
+              
+              <AnimatePresence>
+                {shopDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden"
+                  >
+                    <div className="py-2">
+                      <Link
+                        to="/shop"
+                        className="block px-4 py-3 hover:bg-gray-50 transition-colors text-text font-medium"
+                      >
+                        All Products
+                      </Link>
+                      <div className="border-t border-gray-100 my-2"></div>
+                      {categories.map((category) => (
+                        <Link
+                          key={category.name}
+                          to={category.path}
+                          className="block px-4 py-3 hover:bg-gray-50 transition-colors text-secondary hover:text-primary"
+                        >
+                          {category.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <Link
+              to="/shop?filter=featured"
+              className="text-text hover:text-primary transition-colors duration-200 font-medium"
+            >
+              Featured
+            </Link>
+            <Link
+              to="/shop?filter=deals"
+              className="text-text hover:text-primary transition-colors duration-200 font-medium"
+            >
+              Deals
+            </Link>
           </nav>
 
           {/* Actions */}
@@ -159,7 +213,7 @@ const Header: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search products..."
+                  placeholder="Search electronics..."
                   className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   autoFocus
                 />
@@ -186,16 +240,44 @@ const Header: React.FC = () => {
             className="lg:hidden border-t border-gray-200 bg-white overflow-hidden"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-text hover:text-primary transition-colors duration-200 font-medium py-2"
+              >
+                Home
+              </Link>
+              <Link
+                to="/shop"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-text hover:text-primary transition-colors duration-200 font-medium py-2"
+              >
+                All Products
+              </Link>
               {categories.map((category) => (
                 <Link
                   key={category.name}
                   to={category.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-text hover:text-primary transition-colors duration-200 font-medium py-2"
+                  className="text-secondary hover:text-primary transition-colors duration-200 font-medium py-2 pl-4"
                 >
                   {category.name}
                 </Link>
               ))}
+              <Link
+                to="/shop?filter=featured"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-text hover:text-primary transition-colors duration-200 font-medium py-2"
+              >
+                Featured
+              </Link>
+              <Link
+                to="/shop?filter=deals"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-text hover:text-primary transition-colors duration-200 font-medium py-2"
+              >
+                Deals
+              </Link>
             </nav>
           </motion.div>
         )}

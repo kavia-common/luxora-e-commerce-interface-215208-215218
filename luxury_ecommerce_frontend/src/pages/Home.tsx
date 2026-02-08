@@ -7,7 +7,7 @@ import { mockProducts } from '../data/mockData';
 
 // PUBLIC_INTERFACE
 /**
- * Home page with hero section and featured products
+ * Home page with hero section and featured electronics products
  */
 const Home: React.FC = () => {
   const featuredProducts = mockProducts.filter(p => p.featured);
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
               transition={{ duration: 0.6 }}
               className="text-5xl md:text-6xl font-bold text-text mb-6"
             >
-              Discover Luxury
+              Premium Electronics
               <br />
               <span className="text-primary">Redefined</span>
             </motion.h1>
@@ -34,7 +34,7 @@ const Home: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl text-secondary mb-8"
             >
-              Experience the pinnacle of elegance with our curated collection of premium fashion and accessories.
+              Discover cutting-edge technology with our curated collection of premium laptops, accessories, security systems, and biometric solutions.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -43,7 +43,7 @@ const Home: React.FC = () => {
             >
               <Link to="/shop">
                 <Button size="lg" variant="primary">
-                  Shop Collection
+                  Shop Electronics
                 </Button>
               </Link>
             </motion.div>
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
               viewport={{ once: true }}
               className="text-4xl font-bold text-text mb-4"
             >
-              Featured Collection
+              Featured Electronics
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -70,7 +70,7 @@ const Home: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="text-lg text-secondary"
             >
-              Handpicked pieces that define luxury
+              Handpicked premium technology for professionals and enthusiasts
             </motion.p>
           </div>
 
@@ -104,10 +104,15 @@ const Home: React.FC = () => {
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {['Clothing', 'Accessories', 'Jewelry'].map((category, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { name: 'Laptops', slug: 'laptops', image: 'photo-1496181133206-80ce9b88a853' },
+              { name: 'Computer Accessories', slug: 'computer-accessories', image: 'photo-1587829741301-dc798b83add3' },
+              { name: 'CCTV Camera', slug: 'cctv-camera', image: 'photo-1557597774-9d273605dfa9' },
+              { name: 'Biometric Items', slug: 'biometric-items', image: 'photo-1563013544-824ae1b704d3' }
+            ].map((category, index) => (
               <motion.div
-                key={category}
+                key={category.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -115,19 +120,15 @@ const Home: React.FC = () => {
                 whileHover={{ y: -10 }}
                 className="relative h-80 rounded-lg overflow-hidden shadow-lg cursor-pointer group"
               >
-                <Link to={`/shop?category=${category.toLowerCase()}`}>
+                <Link to={`/shop?category=${category.slug}`}>
                   <img
-                    src={`https://images.unsplash.com/photo-${
-                      category === 'Clothing' ? '1490481651871-ab68de25d43d' :
-                      category === 'Accessories' ? '1584917865442-de89df76afd3' :
-                      '1515562141207-7a88fb7ce338'
-                    }?w=800`}
-                    alt={category}
+                    src={`https://images.unsplash.com/${category.image}?w=800`}
+                    alt={category.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
                     <div className="p-6 w-full">
-                      <h3 className="text-2xl font-bold text-white mb-2">{category}</h3>
+                      <h3 className="text-2xl font-bold text-white mb-2">{category.name}</h3>
                       <p className="text-white/80">Explore collection →</p>
                     </div>
                   </div>
@@ -138,8 +139,57 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Why Choose Us */}
       <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-4xl font-bold text-text mb-4"
+            >
+              Why Choose TECHORA
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: 'Premium Quality',
+                description: 'Only the finest electronics from trusted brands worldwide',
+                icon: '✓'
+              },
+              {
+                title: 'Expert Support',
+                description: '24/7 technical support from certified professionals',
+                icon: '⚙'
+              },
+              {
+                title: 'Fast Delivery',
+                description: 'Free shipping on orders over $500 with tracking',
+                icon: '🚚'
+              }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white p-8 rounded-lg shadow-md text-center"
+              >
+                <div className="text-4xl mb-4">{item.icon}</div>
+                <h3 className="text-xl font-bold text-text mb-3">{item.title}</h3>
+                <p className="text-secondary">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <motion.h2
@@ -153,7 +203,20 @@ const Home: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3].map((i) => (
+            {[
+              {
+                name: 'Tech Professional',
+                comment: 'Exceptional quality electronics and outstanding customer service. My go-to store for all tech needs!'
+              },
+              {
+                name: 'Business Owner',
+                comment: 'Installed their security system in my office. The quality and support have been excellent throughout.'
+              },
+              {
+                name: 'IT Manager',
+                comment: 'Best prices for premium laptops and accessories. Fast delivery and genuine products every time.'
+              }
+            ].map((testimonial, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
@@ -169,10 +232,8 @@ const Home: React.FC = () => {
                     </svg>
                   ))}
                 </div>
-                <p className="text-secondary mb-4">
-                  "Exceptional quality and service. Every piece I've purchased has exceeded my expectations."
-                </p>
-                <p className="font-semibold text-text">- Customer {i}</p>
+                <p className="text-secondary mb-4">"{testimonial.comment}"</p>
+                <p className="font-semibold text-text">- {testimonial.name}</p>
               </motion.div>
             ))}
           </div>

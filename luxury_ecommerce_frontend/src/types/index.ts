@@ -1,3 +1,34 @@
+// Electronics product specifications by category
+export interface LaptopSpecs {
+  cpu: string;
+  ram: string;
+  storage: string;
+  gpu?: string;
+  screenSize: string;
+  brand: string;
+}
+
+export interface AccessorySpecs {
+  type: string;
+  compatibility: string;
+  connectivity: 'wired' | 'wireless' | 'both';
+}
+
+export interface CCTVSpecs {
+  resolution: string;
+  nightVision: boolean;
+  location: 'indoor' | 'outdoor' | 'both';
+  storage: string;
+}
+
+export interface BiometricSpecs {
+  modality: string;
+  capacity: string;
+  connectivity: string;
+}
+
+export type ProductSpecs = LaptopSpecs | AccessorySpecs | CCTVSpecs | BiometricSpecs | null;
+
 export interface Product {
   id: number;
   name: string;
@@ -12,9 +43,9 @@ export interface Product {
   reviewCount: number;
   inStock: boolean;
   featured: boolean;
-  colors?: string[];
-  sizes?: string[];
+  brand?: string;
   tags: string[];
+  specs?: ProductSpecs;
 }
 
 export interface Review {

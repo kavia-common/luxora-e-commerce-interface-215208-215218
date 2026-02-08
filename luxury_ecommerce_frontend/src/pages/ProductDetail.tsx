@@ -7,10 +7,11 @@ import Button from '../components/common/Button';
 import { mockProducts, mockReviews } from '../data/mockData';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import { LaptopSpecs, AccessorySpecs, CCTVSpecs, BiometricSpecs } from '../types';
 
 // PUBLIC_INTERFACE
 /**
- * Product detail page with image gallery, reviews, and add to cart
+ * Product detail page with electronics specifications, image gallery, reviews, and add to cart
  */
 const ProductDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -18,10 +19,8 @@ const ProductDetail: React.FC = () => {
   const productReviews = mockReviews.filter(r => r.productId === product?.id);
   
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedColor, setSelectedColor] = useState<string | undefined>(undefined);
-  const [selectedSize, setSelectedSize] = useState<string | undefined>(undefined);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<'description' | 'reviews'>('description');
+  const [activeTab, setActiveTab] = useState<'description' | 'specs' | 'reviews'>('description');
 
   const { addToCart } = useCart();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
@@ -42,7 +41,7 @@ const ProductDetail: React.FC = () => {
   const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = () => {
-    addToCart(product.id, quantity, selectedColor, selectedSize);
+    addToCart(product.id, quantity);
   };
 
   const handleWishlistToggle = () => {
@@ -51,6 +50,104 @@ const ProductDetail: React.FC = () => {
     } else {
       addToWishlist(product.id);
     }
+  };
+
+  const renderSpecs = () => {
+    if (!product.specs) return null;
+
+    if (product.category === 'Laptops') {
+      const specs = product.specs as LaptopSpecs;
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">CPU:</span>
+            <span className="text-secondary">{specs.cpu}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">RAM:</span>
+            <span className="text-secondary">{specs.ram}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Storage:</span>
+            <span className="text-secondary">{specs.storage}</span>
+          </div>
+          {specs.gpu && (
+            <div className="flex justify-between py-2 border-b">
+              <span className="font-medium text-text">GPU:</span>
+              <span className="text-secondary">{specs.gpu}</span>
+            </div>
+          )}
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Screen Size:</span>
+            <span className="text-secondary">{specs.screenSize}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Brand:</span>
+            <span className="text-secondary">{specs.brand}</span>
+          </div>
+        </div>
+      );
+    } else if (product.category === 'Computer Accessories') {
+      const specs = product.specs as AccessorySpecs;
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Type:</span>
+            <span className="text-secondary">{specs.type}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Compatibility:</span>
+            <span className="text-secondary">{specs.compatibility}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Connectivity:</span>
+            <span className="text-secondary capitalize">{specs.connectivity}</span>
+          </div>
+        </div>
+      );
+    } else if (product.category === 'CCTV Camera') {
+      const specs = product.specs as CCTVSpecs;
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Resolution:</span>
+            <span className="text-secondary">{specs.resolution}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Night Vision:</span>
+            <span className="text-secondary">{specs.nightVision ? 'Yes' : 'No'}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Location:</span>
+            <span className="text-secondary capitalize">{specs.location}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Storage:</span>
+            <span className="text-secondary">{specs.storage}</span>
+          </div>
+        </div>
+      );
+    } else if (product.category === 'Biometric Items') {
+      const specs = product.specs as BiometricSpecs;
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Modality:</span>
+            <span className="text-secondary">{specs.modality}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Capacity:</span>
+            <span className="text-secondary">{specs.capacity}</span>
+          </div>
+          <div className="flex justify-between py-2 border-b">
+            <span className="font-medium text-text">Connectivity:</span>
+            <span className="text-secondary">{specs.connectivity}</span>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -108,6 +205,11 @@ const ProductDetail: React.FC = () => {
           <div>
             <h1 className="text-4xl font-bold text-text mb-4">{product.name}</h1>
             
+            {/* Brand */}
+            {product.brand && (
+              <p className="text-lg text-secondary mb-2">Brand: <span className="font-medium">{product.brand}</span></p>
+            )}
+
             {/* Rating */}
             <div className="flex items-center gap-4 mb-4">
               <div className="flex items-center">
@@ -129,52 +231,17 @@ const ProductDetail: React.FC = () => {
               )}
             </div>
 
+            {/* Stock Status */}
+            <div className="mb-6">
+              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                product.inStock ? 'bg-success/10 text-success' : 'bg-error/10 text-error'
+              }`}>
+                {product.inStock ? 'In Stock' : 'Out of Stock'}
+              </span>
+            </div>
+
             {/* Description */}
             <p className="text-secondary mb-6 leading-relaxed">{product.description}</p>
-
-            {/* Color Selection */}
-            {product.colors && product.colors.length > 0 && (
-              <div className="mb-6">
-                <h3 className="font-semibold text-text mb-3">Color</h3>
-                <div className="flex gap-3">
-                  {product.colors.map(color => (
-                    <button
-                      key={color}
-                      onClick={() => setSelectedColor(color)}
-                      className={`px-4 py-2 border-2 rounded-lg transition-all ${
-                        selectedColor === color
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-gray-300 hover:border-primary'
-                      }`}
-                    >
-                      {color}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Size Selection */}
-            {product.sizes && product.sizes.length > 0 && (
-              <div className="mb-6">
-                <h3 className="font-semibold text-text mb-3">Size</h3>
-                <div className="flex gap-3">
-                  {product.sizes.map(size => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`px-4 py-2 border-2 rounded-lg transition-all ${
-                        selectedSize === size
-                          ? 'border-primary bg-primary text-white'
-                          : 'border-gray-300 hover:border-primary'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* Quantity */}
             <div className="mb-6">
@@ -229,7 +296,7 @@ const ProductDetail: React.FC = () => {
                 <li>✓ Free shipping on orders over $500</li>
                 <li>✓ 30-day easy returns</li>
                 <li>✓ Secure checkout</li>
-                <li>✓ Authentic luxury products</li>
+                <li>✓ Genuine products with warranty</li>
               </ul>
             </div>
           </div>
@@ -249,6 +316,16 @@ const ProductDetail: React.FC = () => {
               Description
             </button>
             <button
+              onClick={() => setActiveTab('specs')}
+              className={`px-6 py-3 font-semibold transition-colors ${
+                activeTab === 'specs'
+                  ? 'text-primary border-b-2 border-primary'
+                  : 'text-secondary hover:text-text'
+              }`}
+            >
+              Specifications
+            </button>
+            <button
               onClick={() => setActiveTab('reviews')}
               className={`px-6 py-3 font-semibold transition-colors ${
                 activeTab === 'reviews'
@@ -261,7 +338,7 @@ const ProductDetail: React.FC = () => {
           </div>
 
           <AnimatePresence mode="wait">
-            {activeTab === 'description' ? (
+            {activeTab === 'description' && (
               <motion.div
                 key="description"
                 initial={{ opacity: 0, y: 20 }}
@@ -270,15 +347,32 @@ const ProductDetail: React.FC = () => {
               >
                 <h3 className="text-xl font-semibold text-text mb-4">Product Details</h3>
                 <p className="text-secondary leading-relaxed mb-4">{product.description}</p>
-                <h4 className="font-semibold text-text mb-2">Features:</h4>
+                <h4 className="font-semibold text-text mb-2">Key Features:</h4>
                 <ul className="list-disc list-inside space-y-1 text-secondary">
-                  <li>Premium quality materials</li>
-                  <li>Expert craftsmanship</li>
-                  <li>Timeless design</li>
-                  <li>Ethically sourced</li>
+                  <li>Premium quality components</li>
+                  <li>Advanced technology</li>
+                  <li>Professional-grade performance</li>
+                  <li>Comprehensive warranty included</li>
                 </ul>
               </motion.div>
-            ) : (
+            )}
+
+            {activeTab === 'specs' && (
+              <motion.div
+                key="specs"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+              >
+                <h3 className="text-xl font-semibold text-text mb-6">Technical Specifications</h3>
+                {renderSpecs()}
+                {!product.specs && (
+                  <p className="text-secondary">Detailed specifications coming soon.</p>
+                )}
+              </motion.div>
+            )}
+
+            {activeTab === 'reviews' && (
               <motion.div
                 key="reviews"
                 initial={{ opacity: 0, y: 20 }}

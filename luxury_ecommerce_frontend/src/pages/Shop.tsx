@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FunnelIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { FunnelIcon } from '@heroicons/react/24/outline';
 import ProductCard from '../components/common/ProductCard';
 import Button from '../components/common/Button';
 import { mockProducts } from '../data/mockData';
@@ -9,7 +9,7 @@ import { Product } from '../types';
 
 // PUBLIC_INTERFACE
 /**
- * Shop page with filtering and sorting capabilities
+ * Shop page with electronics-specific filtering and sorting capabilities
  */
 const Shop: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -17,12 +17,22 @@ const Shop: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     category: searchParams.get('category') || 'all',
-    priceRange: [0, 5000],
+    brand: 'all',
+    priceRange: [0, 3000],
     sortBy: 'featured',
     inStock: false,
   });
 
-  const categories = ['all', 'clothing', 'accessories', 'jewelry', 'footwear'];
+  const categories = [
+    'all',
+    'laptops',
+    'computer-accessories',
+    'cctv-camera',
+    'biometric-items'
+  ];
+
+  const brands = ['all', 'Dell', 'Apple', 'ASUS', 'Lenovo', 'Logitech', 'Corsair', 'Sony', 'Hikvision', 'ZKTeco', 'Samsung'];
+
   const sortOptions = [
     { value: 'featured', label: 'Featured' },
     { value: 'price-asc', label: 'Price: Low to High' },
@@ -35,7 +45,17 @@ const Shop: React.FC = () => {
 
     // Category filter
     if (filters.category !== 'all') {
-      result = result.filter(p => p.category.toLowerCase() === filters.category);
+      const categoryName = filters.category.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+      result = result.filter(p => 
+        p.category.toLowerCase().replace(/\s+/g, '-') === filters.category
+      );
+    }
+
+    // Brand filter
+    if (filters.brand !== 'all') {
+      result = result.filter(p => p.brand === filters.brand);
     }
 
     // Price filter
@@ -44,6 +64,18 @@ const Shop: React.FC = () => {
     // Stock filter
     if (filters.inStock) {
       result = result.filter(p => p.inStock);
+    }
+
+    // Search query
+    const searchQuery = searchParams.get('search');
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(p =>
+        p.name.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query) ||
+        p.tags.some(tag => tag.toLowerCase().includes(query))
+      );
     }
 
     // Sort
@@ -63,10 +95,14 @@ const Shop: React.FC = () => {
     }
 
     setFilteredProducts(result);
-  }, [filters]);
+  }, [filters, searchParams]);
 
   const handleCategoryChange = (category: string) => {
     setFilters(prev => ({ ...prev, category }));
+  };
+
+  const handleBrandChange = (brand: string) => {
+    setFilters(prev => ({ ...prev, brand }));
   };
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -76,10 +112,18 @@ const Shop: React.FC = () => {
   const clearFilters = () => {
     setFilters({
       category: 'all',
-      priceRange: [0, 5000],
+      brand: 'all',
+      priceRange: [0, 3000],
       sortBy: 'featured',
       inStock: false,
     });
+  };
+
+  const formatCategoryName = (slug: string) => {
+    if (slug === 'all') return 'All';
+    return slug.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
   };
 
   return (
@@ -87,7 +131,7 @@ const Shop: React.FC = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-text mb-4">Shop</h1>
+          <h1 className="text-4xl font-bold text-text mb-4">Electronics Shop</h1>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <p className="text-secondary">
               Showing {filteredProducts.length} of {mockProducts.length} products
@@ -150,8 +194,29 @@ const Shop: React.FC = () => {
                         onChange={() => handleCategoryChange(category)}
                         className="mr-2 text-primary focus:ring-primary"
                       />
-                      <span className="capitalize text-secondary hover:text-text">
-                        {category}
+                      <span className="text-secondary hover:text-text">
+                        {formatCategoryName(category)}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Brand Filter */}
+              <div className="mb-6">
+                <h4 className="font-medium text-text mb-3">Brand</h4>
+                <div className="space-y-2 max-h-48 overflow-y-auto">
+                  {brands.map(brand => (
+                    <label key={brand} className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="brand"
+                        checked={filters.brand === brand}
+                        onChange={() => handleBrandChange(brand)}
+                        className="mr-2 text-primary focus:ring-primary"
+                      />
+                      <span className="text-secondary hover:text-text">
+                        {brand === 'all' ? 'All Brands' : brand}
                       </span>
                     </label>
                   ))}
@@ -165,8 +230,8 @@ const Shop: React.FC = () => {
                   <input
                     type="range"
                     min="0"
-                    max="5000"
-                    step="100"
+                    max="3000"
+                    step="50"
                     value={filters.priceRange[1]}
                     onChange={(e) => setFilters(prev => ({ 
                       ...prev, 
