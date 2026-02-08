@@ -1,82 +1,132 @@
-# Lightweight React Template for KAVIA
+# LUXORA - Luxury Ecommerce Frontend
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A premium, modern ecommerce website UI built with React, TypeScript, Tailwind CSS, and Framer Motion.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+### Core Pages
+- **Home**: Hero section with featured products and category showcase
+- **Shop**: Product listing page with advanced filtering, sorting, and search
+- **Product Detail**: Image gallery, reviews, size/color selection, and add to cart
+- **Cart**: Shopping cart with quantity management
+- **Checkout**: Complete checkout flow with order summary
+- **Wishlist**: Save favorite products
+- **Account**: User authentication and order history
+
+### UI Components
+- Responsive header with sticky navigation
+- Product cards with premium hover effects
+- Wishlist toggle with heart icon
+- Advanced filters (category, price range, stock availability)
+- Image galleries with thumbnails
+- Star ratings and reviews
+- Animated micro-interactions using Framer Motion
+
+### Design
+- **Theme**: Traditional Gray (#374151 primary, #059669 accents)
+- **Style**: Classic luxury aesthetic with clean layouts
+- **Typography**: Inter font family
+- **Animations**: Smooth transitions and hover effects
+- **Responsive**: Mobile-first design
+
+### Technical Stack
+- **React 18** with TypeScript
+- **React Router** for navigation
+- **Tailwind CSS** for styling
+- **Framer Motion** for animations
+- **Context API** for state management (Cart & Wishlist)
+- **Local Storage** for persistence
 
 ## Getting Started
 
-In the project directory, you can run:
+### Installation
 
-### `npm start`
-
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-### `npm test`
-
-Launches the test runner in interactive watch mode.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-## Customization
-
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
-}
+```bash
+npm install
 ```
 
-### Components
+### Development
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+```bash
+npm start
+```
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+Runs the app on [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+### Build
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm run build
+```
 
-### Code Splitting
+Creates an optimized production build.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Project Structure
 
-### Analyzing the Bundle Size
+```
+src/
+├── components/
+│   ├── common/          # Reusable components (Button, ProductCard)
+│   └── layout/          # Layout components (Header, Footer)
+├── context/             # React Context providers (Cart, Wishlist)
+├── data/               # Mock data (products, reviews)
+├── pages/              # Page components (Home, Shop, etc.)
+├── types/              # TypeScript type definitions
+├── App.tsx             # Main app component with routing
+└── index.tsx           # Entry point
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Mock Data
 
-### Making a Progressive Web App
+The application uses mock data for:
+- Product catalog (8 luxury items)
+- User reviews
+- Cart and wishlist (persisted in localStorage)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Features in Detail
 
-### Advanced Configuration
+### Cart Management
+- Add/remove items
+- Update quantities
+- Automatic subtotal, tax, and shipping calculation
+- Free shipping over $500
+- Persistent storage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Wishlist
+- Save favorite products
+- Toggle wishlist from product cards or detail page
+- Persistent storage
 
-### Deployment
+### Product Filtering
+- Category filter
+- Price range slider
+- In-stock only option
+- Sort by: featured, price (asc/desc), rating
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Animations
+- Page transitions
+- Hover effects on product cards
+- Micro-interactions on buttons
+- Smooth scroll animations
+- Image gallery transitions
 
-### `npm run build` fails to minify
+## Environment Variables
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The following environment variables are configured:
+
+- `REACT_APP_API_BASE`: API base URL
+- `REACT_APP_FRONTEND_URL`: Frontend URL
+- `REACT_APP_BACKEND_URL`: Backend URL
+
+(Currently using mock data, no backend integration)
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+Private - LUXORA Premium Ecommerce Platform
