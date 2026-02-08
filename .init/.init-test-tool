@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/luxora-e-commerce-interface-215208-215218/luxury_ecommerce_frontend"
+}
